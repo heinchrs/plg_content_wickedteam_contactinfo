@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="3.0" method="upgrade" client="side" group="content">
+	<name>WickedTeam Contactinfo</name>
+	<creationDate>22-Feb-2025</creationDate>
+	<author>Heinl Christian</author>
+	<authorEmail>heinchrs@gmail.com</authorEmail>
+	<authorUrl></authorUrl>
+	<copyright>Heinl Christian, 2025</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<version>1.0.0</version>
+	<description>PLG_WICKEDTEAM_CONTACTINFO_DESCRIPTION</description>
+	<files folder="site">
+		<folder>language</folder>
+		<filename plugin="wickedteam_contactinfo">wickedteam_contactinfo.php</filename>
+	</files>
+	<params/>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="use_css_styling" type="radio" default="1" label="PLG_WICKEDTEAM_CONTACTINFO_USE_CSS_STYLING" description="PLG_WICKEDTEAM_CONTACTINFO_USE_CSS_STYLING_DESCRIPTION">
+					<option value="0">PLG_WICKEDTEAM_CONTACTINFO_NO</option><option value="1">PLG_WICKEDTEAM_CONTACTINFO_YES</option></field><field name="prefix_class" type="text" default="wci_" size="50" label="PLG_WICKEDTEAM_CONTACTINFO_CSS_PREFIX_CLASS" description="PLG_WICKEDTEAM_CONTACTINFO_CSS_PREFIX_CLASS_DESCRIPTION">
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+	<changelogurl>https://raw.githubusercontent.com/heinchrs/plg_content_wickedteam_contactinfo/master/.release/changelog.xml</changelogurl>
+	<updateservers>
+		<server name="Wickedteam Contactinfo update server" type="extension" priority="1">
+			https://raw.githubusercontent.com/heinchrs/plg_content_wickedteam_contactinfo/master/.release/wickedteam_contactinfo_update.xml
+		</server>
+	</updateservers>
+</extension>

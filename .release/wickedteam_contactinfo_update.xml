@@ -1,0 +1,15 @@
+<updates>
+	<update>
+		<name>WickedTeam Contactinfo</name>
+		<description>Plugin for inserting WickedTeam memberdata into content</description>
+		<element>plg_content_wickedteam_contactinfo</element>
+		<type>plugin</type>
+		<version>1.0.0</version>
+		<changelogurl>https://rawcdn.githack.com/heinchrs/plg_content_wickedteam_contactinfo/main/.release/changelog.xml</changelogurl>
+		<downloads>
+			<downloadurl type="full" format="zip">https://raw.githubusercontent.com/heinchrs/plg_content_wickedteam_contactinfo/main/.release/plg_content_wickedteam_contactinfo-v1.0.0.zip</downloadurl>
+		</downloads>
+		<targetplatform name="joomla" version="3|4"/>
+		<client>site</client>
+	</update>
+</updates>
