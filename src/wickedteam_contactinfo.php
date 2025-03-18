@@ -78,7 +78,7 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 		// Don't run this plugin when it is not within article context
 		if ($context != 'com_content.article' && $context != 'mod_custom.content')
 		{
-			return;
+			return true;
 		}
 
 		// Regular expression to search if tags {wickedteamcontactinfo} ... {/wickedteamcontactinfo} are present
@@ -124,7 +124,7 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 	 * @param   array   $matches  Array of strings returned by regular expression matching
 	 * @return  string
 	 */
-	protected function wickedteamContactinfoReplacer(&$matches)
+	protected function wickedteamContactinfoReplacer($matches)
 	{
 		// Get the global JDatabase object
 		$database = JFactory::getDBO();
@@ -172,10 +172,10 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 			}
 
 			// SQL statement to fetch data which is specified by alias name and field value
-			$SQL = "SELECT f.member_id
-					FROM #__wickedteam_member_field_values AS f
-					LEFT JOIN #__wickedteam_fields AS a ON a.id = f.field_id
-					WHERE a.alias = '%s' AND f.value LIKE '%s'";
+			$SQL = "SELECT f.item_id
+					FROM #__fields_values AS f
+					LEFT JOIN #__fields AS a ON a.id = f.field_id
+					WHERE a.name = '%s' AND f.value LIKE '%s'";
 
 			/*
 			 * This for loop is used to encapsulate the SQL statements in such a way
@@ -195,7 +195,7 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 				else
 				{
 					$statement = sprintf($SQL, $whereConditions[$i]['alias'], $whereConditions[$i]['value']) .
-					sprintf(" AND f.member_id IN(%s)", $statement);
+					sprintf(" AND f.item_id IN(%s)", $statement);
 				}
 			}
 
@@ -213,7 +213,7 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 				return JText::_('PLG_WICKEDTEAM_CONTACTINFO_QUERY_NO_RECORD');
 			}
 
-			$wickedteamMemberId = intval($wickedteamMemberData[0]['member_id']);
+			$wickedteamMemberId = intval($wickedteamMemberData[0]['item_id']);
 		}
 
 		// If a wickedteam member was found
@@ -221,10 +221,10 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 		{
 			$query = $database->getQuery(true);
 			$query->clear();
-			$query->select('f.value, a.title, a.alias');
-			$query->from('#__wickedteam_member_field_values AS f');
-			$query->leftjoin('#__wickedteam_fields AS a ON a.id = f.field_id');
-			$query->where('f.member_id = ' . $wickedteamMemberId);
+			$query->select('f.value, a.title, a.name');
+			$query->from('#__fields_values AS f');
+			$query->leftjoin('#__fields AS a ON a.id = f.field_id');
+			$query->where('f.item_id = ' . $wickedteamMemberId);
 			$query->order('a.id');
 			$database->setQuery($query);
 			$wickedteamMemberData = $database->loadAssoclist();
@@ -232,7 +232,7 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 			// Add wickedteam member id as requestable parameter
 			$buffer['value'] = $wickedteamMemberId;
 			$buffer['title'] = 'id';
-			$buffer['alias'] = 'id';
+			$buffer['name'] = 'id';
 			$wickedteamMemberData[] = $buffer;
 
 			// print("<pre>");
@@ -241,7 +241,7 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 
 			// Parameter
 			$cssPrefix = $this->params->get("prefix_class", "wci_");
-			$useCssStyling = intval($this->params->get("useCssStyling"));
+			$useCssStyling = intval($this->params->get("use_css_styling"));
 
 			if ($useCssStyling)
 			{
@@ -258,28 +258,28 @@ class PlgContentWickedteam_Contactinfo extends CMSPlugin
 			// Loop over all wickedteam fields, which was found for this member
 			foreach ($wickedteamMemberData as $wickedteamField)
 			{
-				$style = "<span class=\"" . $cssPrefix . "field-" . $wickedteamField['alias'] . "\">";
+				$style = "<span class=\"" . $cssPrefix . "field-" . $wickedteamField['name'] . "\">";
 
 				$description = "";
 				$valueMatch = array();
 
 				// Regular expression to search [...;...]
 				// This is used if not only the field value, but also an additional text should be printed
-				$regex = "#\[" . $wickedteamField['alias'] . ";(.*?)\]#s";
+				$regex = "#\[" . $wickedteamField['name'] . ";(.*?)\]#s";
 
 				if (preg_match($regex, $contactHtml, $valueMatch))
 				{
 					$description = $valueMatch[1];
-					$contactHtml = preg_replace($regex, "[" . $wickedteamField['alias'] . "]", $contactHtml);
+					$contactHtml = preg_replace($regex, "[" . $wickedteamField['name'] . "]", $contactHtml);
 				}
 
 				if ($useCssStyling == 1)
 				{
-					$contactHtml = str_replace('[' . $wickedteamField['alias'] . ']', $style . $description . $wickedteamField['value'] . "</span>", $contactHtml);
+					$contactHtml = str_replace('[' . $wickedteamField['name'] . ']', $style . $description . $wickedteamField['value'] . "</span>", $contactHtml);
 				}
 				else
 				{
-					$contactHtml = str_replace('[' . $wickedteamField['alias'] . ']', $description . $wickedteamField['value'], $contactHtml);
+					$contactHtml = str_replace('[' . $wickedteamField['name'] . ']', $description . $wickedteamField['value'], $contactHtml);
 				}
 			}
 		}

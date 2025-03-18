@@ -2,6 +2,14 @@
 	<changelog>
 		<element>plg_content_wickedteam_contactinfo</element>
 		<type>plugin</type>
+		<version>2.0.0</version>
+		<note>
+			<item>Adaption due to new field structure regarding Joomla fields</item>
+		</note>
+	</changelog>
+	<changelog>
+		<element>plg_content_wickedteam_contactinfo</element>
+		<type>plugin</type>
 		<version>1.0.0</version>
 		<note>
 			<item>First version, adapted from correponding Kandanda contactinfo plugin</item>
